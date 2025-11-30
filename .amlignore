@@ -1,0 +1,71 @@
+# Azure ML Ignore - Exclude large files from deployment upload
+
+# Virtual Environment
+.venv/
+venv/
+ENV/
+env/
+
+# Dataset (1.6M tweets, ~240MB)
+data/sentiment140.csv
+data/*.csv
+
+# Model Checkpoints (training artifacts)
+app/models/bert_checkpoints/
+app/models/checkpoint-*/
+
+# Pre-trained models (downloaded from Azure Blob on startup)
+app/models/bert_sentiment/
+app/models/bert_sentiment.zip
+app/models/*.pkl
+app/models/*.joblib
+app/models/*.h5
+app/models/*.pth
+
+# Backup models
+app/models/best_model.pkl.backup
+app/models/vectorizer.pkl.backup
+app/models/bert_sentiment_backup/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+*.egg-info/
+
+# IDE
+.vscode/
+.idea/
+
+# Git
+.git/
+.gitignore
+
+# Logs
+*.log
+logs/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Azure
+.azure/
+.azureml/
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Documentation
+AZURE_ML_DEPLOYMENT.md
+AZURE_STORAGE.md
+README.md
+
+# Scripts not needed for deployment
+scripts/
+test_*.py

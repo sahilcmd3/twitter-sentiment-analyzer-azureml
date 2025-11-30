@@ -1,0 +1,106 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+*.egg
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Virtual Environment
+.venv/
+venv/
+ENV/
+env/
+.virtualenv/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*.sublime-project
+*.sublime-workspace
+
+# Environment variables
+.env
+.env.local
+
+# Large Dataset (download separately or use Azure Blob)
+data/sentiment140.csv
+data/*.csv
+
+# Model Checkpoints (training artifacts - not needed for deployment)
+app/models/bert_checkpoints/
+app/models/checkpoint-*/
+
+# Pre-trained models (will be stored in Azure Blob Storage)
+app/models/bert_sentiment/
+app/models/bert_sentiment.zip
+app/models/*.pkl
+app/models/*.joblib
+app/models/*.h5
+app/models/*.pth
+
+# Keep backup models
+app/models/best_model.pkl.backup
+app/models/vectorizer.pkl.backup
+app/models/bert_sentiment_backup/
+
+# Keep model comparison results
+!app/models/
+!data/model_comparison.csv
+
+# Logs
+*.log
+logs/
+*.log.*
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# Azure
+.azure/
+*.azureml/
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# Documentation builds
+docs/_build/
+site/
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+*~
+
+# Git LFS (if using)
+*.bin
+*.safetensors
+
+# Deployment files with sensitive keys
+deploy.zip
+local.settings.json
+
+# Keep deployment documentation
+AZURE_APP_SERVICE_DEPLOYMENT.md

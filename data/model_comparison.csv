@@ -1,0 +1,5 @@
+Model,Accuracy,Accuracy %,Training Time (s),Inference Time (ms)
+Logistic Regression,0.7652,76.52%,2.2,0.0
+Naive Bayes,0.7503,75.03%,0.01,0.0
+Linear SVM,0.76,76.00%,0.31,0.0
+BERT (DistilBERT),0.8330,83.30%,1777.12,N/A (batch dependent)

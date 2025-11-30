@@ -1,0 +1,31 @@
+# Core Dependencies
+flask==3.0.0
+flask-cors==4.0.0
+python-dotenv==1.0.0
+requests==2.31.0
+
+# Data Processing - Use pre-built wheels
+pandas>=2.0.0
+numpy>=1.24.0
+
+# NLP Libraries
+nltk==3.8.1
+textblob==0.17.1
+
+# Machine Learning
+scikit-learn>=1.3.0
+
+# Deep Learning - BERT
+transformers>=4.35.0
+torch>=2.0.0
+sentencepiece>=0.1.99
+
+# Visualization
+matplotlib>=3.7.0
+seaborn>=0.12.0
+
+# Twitter API
+tweepy==4.14.0
+
+# Production Server
+gunicorn==21.2.0
