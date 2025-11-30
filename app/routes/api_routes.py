@@ -7,6 +7,7 @@ import pandas as pd
 from datetime import datetime, timezone
 import os
 import requests
+import json
 
 api_bp = Blueprint("api", __name__)
 
@@ -62,7 +63,27 @@ def analyze_with_azure_ml(text):
         
         response = requests.post(endpoint, headers=headers, json=data, timeout=30)
         response.raise_for_status()
-        return response.json()
+        
+        result = response.json()
+        
+        # If result is a string, parse it again
+        if isinstance(result, str):
+            result = json.loads(result)
+        
+        current_app.logger.info(f"Azure ML parsed result: {result}")
+        
+        # Validate response structure
+        if not isinstance(result, dict):
+            current_app.logger.error(f"Azure ML returned non-dict response after parsing: {type(result)}")
+            return None
+            
+        return result
+    except requests.exceptions.RequestException as e:
+        current_app.logger.error(f"Azure ML request error: {e}")
+        return None
+    except json.JSONDecodeError as e:
+        current_app.logger.error(f"Azure ML JSON decode error: {e}")
+        return None
     except Exception as e:
         current_app.logger.error(f"Azure ML endpoint error: {e}")
         return None
@@ -114,14 +135,18 @@ def analyze():
             sentiments = []
             for text in df['processed_text']:
                 result = analyze_with_azure_ml(text)
-                if result and 'sentiment' in result:
+                if result and isinstance(result, dict) and 'sentiment' in result:
                     sentiments.append({
                         'sentiment': result['sentiment'],
                         'confidence': result.get('confidence', 0.5)
                     })
                 else:
-                    # Fallback to TextBlob if Azure ML fails
-                    sentiments.append({'sentiment': 'neutral', 'confidence': 0.5})
+                    # Fallback to local analyzer if Azure ML fails
+                    local_result = analyzer.analyze(text)
+                    sentiments.append({
+                        'sentiment': local_result['sentiment'],
+                        'confidence': local_result['confidence']
+                    })
             
             df['sentiment'] = [s['sentiment'] for s in sentiments]
             df['confidence'] = [s['confidence'] for s in sentiments]
@@ -189,8 +214,14 @@ def analyze_text():
         # Preprocess
         processed = preprocessor.preprocess(text)
 
-        # Analyze
-        result = analyzer.analyze(processed)
+        # Analyze with Azure ML if available, otherwise use local analyzer
+        if os.getenv('AZURE_ML_ENDPOINT'):
+            result = analyze_with_azure_ml(processed)
+            if not result or not isinstance(result, dict):
+                # Fallback to local analyzer
+                result = analyzer.analyze(processed)
+        else:
+            result = analyzer.analyze(processed)
 
         response = {
             "status": "success",

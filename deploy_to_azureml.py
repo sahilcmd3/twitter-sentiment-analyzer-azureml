@@ -11,12 +11,16 @@ from azure.ai.ml.entities import (
 )
 from azure.identity import DefaultAzureCredential
 import os
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 # Configuration
-SUBSCRIPTION_ID = "48a4f2d5-f9d4-4c14-b1ca-f838b958c65b"
-RESOURCE_GROUP = "sentiment-ml-rg"
-WORKSPACE_NAME = "sentiment-analysis-workspace"
-ENDPOINT_NAME = "sentiment-endpoint-48a4f2d5"  # Must be globally unique
+SUBSCRIPTION_ID = os.getenv('AZURE_SUBSCRIPTION_ID')
+RESOURCE_GROUP = os.getenv('AZURE_RESOURCE_GROUP')
+WORKSPACE_NAME = os.getenv('AZURE_WORKSPACE_NAME')
+ENDPOINT_NAME = os.getenv('AZURE_ENDPOINT_NAME')  # Must be globally unique
 DEPLOYMENT_NAME = "sentiment-bert-deployment"
 
 def main():

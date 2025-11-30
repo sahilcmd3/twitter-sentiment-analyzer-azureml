@@ -112,7 +112,13 @@ class SentimentAnalyzer:
                 confidence = probabilities[0][prediction].item()
 
             sentiment = "positive" if prediction == 1 else "negative"
-            polarity = confidence if sentiment == "positive" else -confidence
+            
+            # Add neutral category for low confidence predictions
+            if confidence < 0.65:
+                sentiment = "neutral"
+                confidence = 1.0 - max(probabilities[0]).item()
+            
+            polarity = confidence if sentiment == "positive" else (-confidence if sentiment == "negative" else 0.0)
 
             return {
                 "sentiment": sentiment,
