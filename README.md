@@ -20,6 +20,7 @@ A production-ready sentiment analysis system for Twitter data, powered by **Azur
 ## Architecture
 
 ```mermaid
+%%{init: {'theme':'dark', 'themeVariables': { 'primaryColor':'#0078d4', 'primaryTextColor':'#fff', 'primaryBorderColor':'#fff', 'lineColor':'#fff', 'secondaryColor':'#50e6ff', 'tertiaryColor':'#00b294', 'textColor':'#fff', 'fontSize':'16px'}}}%%
 graph TB
     User[User Browser] -->|HTTPS| WebApp[Azure App Service<br/>Flask Web App]
     WebApp -->|Fetch Tweets| Twitter[Twitter API v2]
@@ -28,9 +29,12 @@ graph TB
     BERT -->|Sentiment + Confidence| WebApp
     BlobStorage[Azure Blob Storage] -.->|Model Files| BERT
     
-    style WebApp fill:#0078d4
-    style MLEndpoint fill:#50e6ff
-    style BERT fill:#00b294
+    style WebApp fill:#0078d4,stroke:#fff,stroke-width:2px,color:#fff
+    style MLEndpoint fill:#50e6ff,stroke:#fff,stroke-width:2px,color:#000
+    style BERT fill:#00b294,stroke:#fff,stroke-width:2px,color:#fff
+    style User fill:#333,stroke:#fff,stroke-width:2px,color:#fff
+    style Twitter fill:#1da1f2,stroke:#fff,stroke-width:2px,color:#fff
+    style BlobStorage fill:#ffa500,stroke:#fff,stroke-width:2px,color:#fff
 ```
 
 
