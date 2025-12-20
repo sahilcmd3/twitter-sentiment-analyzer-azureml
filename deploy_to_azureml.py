@@ -24,7 +24,7 @@ ENDPOINT_NAME = os.getenv('AZURE_ENDPOINT_NAME')  # Must be globally unique
 DEPLOYMENT_NAME = "sentiment-bert-deployment"
 
 def main():
-    print("🚀 Starting Azure ML Deployment...")
+    print("Starting Azure ML Deployment...")
     
     # Authenticate
     credential = DefaultAzureCredential()
@@ -35,10 +35,10 @@ def main():
         workspace_name=WORKSPACE_NAME
     )
     
-    print(f"✅ Connected to workspace: {WORKSPACE_NAME}")
+    print(f"Connected to workspace: {WORKSPACE_NAME}")
     
     # Create endpoint
-    print(f"\n📍 Creating endpoint: {ENDPOINT_NAME}")
+    print(f"\nCreating endpoint: {ENDPOINT_NAME}")
     endpoint = ManagedOnlineEndpoint(
         name=ENDPOINT_NAME,
         description="Twitter Sentiment Analysis API",
@@ -47,12 +47,12 @@ def main():
     
     try:
         ml_client.online_endpoints.begin_create_or_update(endpoint).result()
-        print(f"✅ Endpoint created: {ENDPOINT_NAME}")
+        print(f"Endpoint created: {ENDPOINT_NAME}")
     except Exception as e:
-        print(f"ℹ️  Endpoint might already exist: {e}")
+        print(f"Info: Endpoint might already exist: {e}")
     
     # Create environment
-    print("\n🔧 Creating environment...")
+    print("\nCreating environment...")
     env = Environment(
         name="sentiment-env",
         description="Environment for sentiment analysis",
@@ -61,10 +61,10 @@ def main():
     )
     
     ml_client.environments.create_or_update(env)
-    print("✅ Environment created")
+    print("Environment created")
     
     # Create deployment
-    print(f"\n🚢 Creating deployment: {DEPLOYMENT_NAME}")
+    print(f"\nCreating deployment: {DEPLOYMENT_NAME}")
     deployment = ManagedOnlineDeployment(
         name=DEPLOYMENT_NAME,
         endpoint_name=ENDPOINT_NAME,
@@ -78,19 +78,19 @@ def main():
     )
     
     ml_client.online_deployments.begin_create_or_update(deployment).result()
-    print(f"✅ Deployment created: {DEPLOYMENT_NAME}")
+    print(f"Deployment created: {DEPLOYMENT_NAME}")
     
     # Update endpoint to route 100% traffic to this deployment
-    print("\n🔀 Routing traffic to deployment...")
+    print("\nRouting traffic to deployment...")
     endpoint = ml_client.online_endpoints.get(ENDPOINT_NAME)
     endpoint.traffic = {DEPLOYMENT_NAME: 100}
     ml_client.online_endpoints.begin_create_or_update(endpoint).result()
-    print("✅ Traffic routed")
+    print("Traffic routed")
     
     # Get endpoint details
     endpoint = ml_client.online_endpoints.get(ENDPOINT_NAME)
     print(f"\n{'='*60}")
-    print("🎉 DEPLOYMENT SUCCESSFUL!")
+    print("DEPLOYMENT SUCCESSFUL!")
     print(f"{'='*60}")
     print(f"Endpoint Name: {endpoint.name}")
     print(f"Scoring URI: {endpoint.scoring_uri}")
@@ -99,12 +99,12 @@ def main():
     
     # Get keys
     keys = ml_client.online_endpoints.get_keys(ENDPOINT_NAME)
-    print(f"\n🔑 Authentication Keys:")
+    print(f"\nAuthentication Keys:")
     print(f"Primary Key: {keys.primary_key}")
     print(f"Secondary Key: {keys.secondary_key}")
     print(f"{'='*60}")
     
-    print("\n✅ Deployment complete! Test your endpoint with:")
+    print("\nDeployment complete! Test your endpoint with:")
     print(f"\ncurl -X POST {endpoint.scoring_uri} \\")
     print(f'  -H "Content-Type: application/json" \\')
     print(f'  -H "Authorization: Bearer {keys.primary_key}" \\')

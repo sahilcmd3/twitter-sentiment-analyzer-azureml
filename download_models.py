@@ -82,9 +82,9 @@ def download_models_from_blob():
             success = False
     
     if success:
-        logger.info("✅ All models downloaded successfully!")
+        logger.info("All models downloaded successfully!")
     else:
-        logger.warning("⚠️  Some models failed to download. App will use fallback methods.")
+        logger.warning("Warning: Some models failed to download. App will use fallback methods.")
     
     return success
 

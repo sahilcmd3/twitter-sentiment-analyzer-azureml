@@ -9,9 +9,11 @@ import os
 import requests
 import json
 
+# Flask Blueprint for API routes
 api_bp = Blueprint("api", __name__)
 
-# Lazy initialization - components will be created on first use
+# Lazy initialization - components will be created on first use to save memory
+# These singletons are reused across all requests
 _collector = None
 _preprocessor = None
 _analyzer = None
@@ -19,7 +21,15 @@ _visualizer = None
 
 
 def get_collector():
-    """Get or create TwitterCollector singleton"""
+    """
+    Get or create TwitterCollector singleton instance.
+    
+    Uses lazy initialization pattern to create the collector only when needed.
+    The instance is reused across all API requests.
+    
+    Returns:
+        TwitterCollector: Singleton instance for fetching tweets
+    """
     global _collector
     if _collector is None:
         _collector = TwitterCollector()
@@ -27,7 +37,12 @@ def get_collector():
 
 
 def get_preprocessor():
-    """Get or create TextPreprocessor singleton"""
+    """
+    Get or create TextPreprocessor singleton instance.
+    
+    Returns:
+        TextPreprocessor: Singleton instance for text cleaning
+    """
     global _preprocessor
     if _preprocessor is None:
         _preprocessor = TextPreprocessor()
@@ -35,38 +50,68 @@ def get_preprocessor():
 
 
 def get_analyzer():
-    """Get or create SentimentAnalyzer singleton"""
+    """
+    Get or create SentimentAnalyzer singleton instance.
+    
+    Determines whether to use Azure ML endpoint or local models based on
+    environment variables. If AZURE_ML_ENDPOINT is set, local models won't be loaded.
+    
+    Returns:
+        SentimentAnalyzer: Singleton instance for sentiment analysis
+    """
     global _analyzer
     if _analyzer is None:
-        # Use Azure ML endpoint if available, otherwise local models
+        # Check if Azure ML endpoint is configured
         use_azure_ml = os.getenv('AZURE_ML_ENDPOINT') is not None
         if use_azure_ml:
             current_app.logger.info("Using Azure ML endpoint for inference")
+        # If using Azure ML, don't load local models to save memory
         _analyzer = SentimentAnalyzer(use_ml_model=not use_azure_ml)
     return _analyzer
 
 
 def analyze_with_azure_ml(text):
-    """Call Azure ML endpoint for sentiment analysis"""
+    """
+    Call Azure ML managed endpoint for sentiment analysis.
+    
+    Sends preprocessed text to Azure ML BERT model endpoint and returns
+    sentiment results. Handles JSON parsing edge cases where Azure ML
+    returns JSON string instead of object.
+    
+    Args:
+        text (str): Preprocessed text to analyze
+        
+    Returns:
+        dict: Sentiment analysis result or None if request fails
+              Example: {
+                  'sentiment': 'positive',
+                  'confidence': 0.96,
+                  'method': 'BERT'
+              }
+    """
     endpoint = os.getenv('AZURE_ML_ENDPOINT')
     api_key = os.getenv('AZURE_ML_API_KEY')
     
+    # Return None if endpoint not configured
     if not endpoint or not api_key:
         return None
     
     try:
+        # Prepare request headers with Bearer token authentication
         headers = {
             "Content-Type": "application/json",
             "Authorization": f"Bearer {api_key}"
         }
         data = {"text": text}
         
+        # Send POST request to Azure ML endpoint with 30 second timeout
         response = requests.post(endpoint, headers=headers, json=data, timeout=30)
-        response.raise_for_status()
+        response.raise_for_status()  # Raise exception for 4xx/5xx status codes
         
         result = response.json()
         
-        # If result is a string, parse it again
+        # Handle edge case: Azure ML score.py returns json.dumps() string
+        # So response.json() gives us a string instead of dict
         if isinstance(result, str):
             result = json.loads(result)
         
