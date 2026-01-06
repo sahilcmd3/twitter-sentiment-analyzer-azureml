@@ -6,30 +6,32 @@
         <title>Twitter Sentiment Analysis Bot</title>
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
         <style>
             * {
                 margin: 0;
                 padding: 0;
                 box-sizing: border-box;
+                font-family: 'Google Sans', sans-serif;
             }
 
             body {
-                font-family: 'Google Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-                background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+                font-family: 'Google Sans', sans-serif;
+                background: #1E1F22;
                 min-height: 100vh;
                 padding: 20px;
-                color: #e0e0e0;
+                color: #E8E8E8;
             }
 
             .container {
                 max-width: 1200px;
                 margin: 0 auto;
-                background: #1e1e2e;
+                background: #2B2D30;
                 border-radius: 20px;
                 padding: 40px;
-                box-shadow: 0 25px 70px rgba(0, 0, 0, 0.5);
-                border: 1px solid rgba(255, 255, 255, 0.05);
+                box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+                border: 1px solid #43454A;
             }
 
             h1 {
@@ -43,7 +45,7 @@
 
             .subtitle {
                 text-align: center;
-                color: #a0a0b0;
+                color: #A0A0A0;
                 margin-bottom: 40px;
                 font-size: 1.1em;
                 font-weight: 400;
@@ -61,7 +63,7 @@
                 display: block;
                 margin-bottom: 8px;
                 font-weight: 600;
-                color: #c0c0d0;
+                color: #E8E8E8;
                 font-size: 0.95em;
                 letter-spacing: 0.3px;
             }
@@ -70,30 +72,30 @@
             input[type="number"] {
                 width: 100%;
                 padding: 14px 16px;
-                border: 1px solid rgba(255, 255, 255, 0.1);
+                border: 1px solid #43454A;
                 border-radius: 10px;
                 font-size: 16px;
                 transition: all 0.3s ease;
-                background: #2a2a3a;
-                color: #ffffff;
+                background: #313335;
+                color: #FFFFFF;
             }
 
             input:focus {
                 outline: none;
-                border-color: #00d4ff;
-                background: #2f2f3f;
-                box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.1);
+                border-color: #FF6B00;
+                background: #313335;
+                box-shadow: 0 0 0 2px rgba(255, 107, 0, 0.15);
             }
 
             input::placeholder {
-                color: #6a6a7a;
+                color: #6C6C6C;
             }
 
             button {
                 background: transparent;
-                color: #00d4ff;
+                color: #FF6B00;
                 padding: 16px 40px;
-                border: 2px solid #00d4ff;
+                border: 2px solid #FF6B00;
                 border-radius: 10px;
                 font-size: 18px;
                 font-weight: 700;
@@ -105,10 +107,10 @@
             }
 
             button:hover {
-                background: linear-gradient(135deg, #00d4ff 0%, #0077ff 100%);
-                color: #0a0a0f;
+                background: #FF6B00;
+                color: #FFFFFF;
                 transform: translateY(-2px);
-                box-shadow: 0 8px 20px rgba(0, 119, 255, 0.3);
+                box-shadow: 0 8px 20px rgba(255, 107, 0, 0.3);
             }
 
             button:disabled {
@@ -117,19 +119,19 @@
                 transform: none;
                 box-shadow: none;
                 background: transparent;
-                color: #00d4ff;
+                color: #FF6B00;
             }
 
             .loading {
                 display: none;
                 text-align: center;
                 margin: 30px 0;
-                color: #a0a0b0;
+                color: #A0A0A0;
             }
 
             .spinner {
-                border: 4px solid rgba(255, 255, 255, 0.1);
-                border-top: 4px solid #00d4ff;
+                border: 4px solid #43454A;
+                border-top: 4px solid #FF6B00;
                 border-radius: 50%;
                 width: 50px;
                 height: 50px;
@@ -166,29 +168,29 @@
             }
 
             .stat-card {
-                background: linear-gradient(135deg, #2a2a3a 0%, #252535 100%);
+                background: #2B2D30;
                 padding: 25px;
                 border-radius: 12px;
                 text-align: center;
-                border: 1px solid rgba(255, 255, 255, 0.05);
+                border: 1px solid #43454A;
                 transition: all 0.3s ease;
             }
 
             .stat-card:hover {
                 transform: translateY(-5px);
-                border-color: rgba(0, 212, 255, 0.3);
-                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+                border-color: #FF6B00;
+                box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
             }
 
             .stat-value {
                 font-size: 2.5em;
                 font-weight: 700;
-                color: #00d4ff;
+                color: #FF6B00;
                 margin: 10px 0;
             }
 
             .stat-label {
-                color: #9090a0;
+                color: #A0A0A0;
                 font-size: 0.85em;
                 text-transform: uppercase;
                 letter-spacing: 1.5px;
@@ -197,10 +199,24 @@
 
             .viz-section {
                 margin: 30px 0;
-                background: linear-gradient(135deg, #2a2a3a 0%, #252535 100%);
+                background: #2B2D30;
                 padding: 25px;
                 border-radius: 12px;
-                border: 1px solid rgba(255, 255, 255, 0.05);
+                border: 1px solid #43454A;
+                position: relative;
+            }
+
+            .viz-grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 20px;
+                margin: 30px 0;
+            }
+
+            @media (max-width: 968px) {
+                .viz-grid {
+                    grid-template-columns: 1fr;
+                }
             }
 
             .viz-section h3 {
@@ -210,10 +226,10 @@
                 font-weight: 600;
             }
 
-            .viz-section img {
-                max-width: 100%;
-                border-radius: 8px;
-                box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            .chart-container {
+                position: relative;
+                height: 300px;
+                width: 100%;
             }
 
             .error {
@@ -231,8 +247,8 @@
             }
 
             .tweet-card {
-                background: linear-gradient(135deg, #2a2a3a 0%, #252535 100%);
-                border: 1px solid rgba(255, 255, 255, 0.05);
+                background: #2B2D30;
+                border: 1px solid #43454A;
                 border-radius: 10px;
                 padding: 18px;
                 margin-bottom: 12px;
@@ -240,13 +256,14 @@
             }
 
             .tweet-card:hover {
-                border-color: rgba(0, 212, 255, 0.3);
+                border-color: #FF6B00;
                 transform: translateX(5px);
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
             }
 
             .tweet-text {
                 margin-bottom: 12px;
-                color: #d0d0e0;
+                color: #E8E8E8;
                 line-height: 1.6;
             }
 
@@ -254,7 +271,7 @@
                 display: flex;
                 justify-content: space-between;
                 font-size: 0.85em;
-                color: #8080a0;
+                color: #A0A0A0;
             }
 
             .sentiment-positive {
@@ -274,8 +291,8 @@
                 text-align: center;
                 margin-top: 50px;
                 padding-top: 30px;
-                border-top: 1px solid rgba(255, 255, 255, 0.05);
-                color: #7070a0;
+                border-top: 1px solid #43454A;
+                color: #A0A0A0;
                 font-size: 0.9em;
             }
 
@@ -328,14 +345,20 @@
 
                 <div class="stats-grid" id="statsGrid"></div>
 
-                <div class="viz-section">
-                    <h3>Sentiment Distribution</h3>
-                    <img id="sentimentDistImg" alt="Sentiment Distribution" />
-                </div>
+                <div class="viz-grid">
+                    <div class="viz-section">
+                        <h3>Sentiment Distribution</h3>
+                        <div class="chart-container">
+                            <canvas id="sentimentDistChart"></canvas>
+                        </div>
+                    </div>
 
-                <div class="viz-section">
-                    <h3>Sentiment Timeline</h3>
-                    <img id="timelineImg" alt="Sentiment Timeline" />
+                    <div class="viz-section">
+                        <h3>Sentiment Timeline</h3>
+                        <div class="chart-container">
+                            <canvas id="timelineChart"></canvas>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="sample-tweets">
@@ -351,6 +374,9 @@
         </div>
 
         <script>
+            let sentimentChart = null;
+            let timelineChart = null;
+
             async function analyzeSentiment() {
                 const query = document.getElementById("query").value;
                 const maxTweets = parseInt(
@@ -435,12 +461,11 @@
                 </div>
             `;
 
-                // Display visualizations
-                document.getElementById("sentimentDistImg").src =
-                    "data:image/png;base64," +
-                    data.visualizations.sentiment_distribution;
-                document.getElementById("timelineImg").src =
-                    "data:image/png;base64," + data.visualizations.timeline;
+                // Render sentiment distribution chart
+                renderSentimentChart(stats);
+                
+                // Render timeline chart
+                renderTimelineChart(data.sample_tweets);
 
                 // Display sample tweets
                 const tweetsList = document.getElementById("tweetsList");
@@ -467,6 +492,187 @@
                 document.getElementById("results").scrollIntoView({
                     behavior: "smooth",
                     block: "start",
+                });
+            }
+
+            function renderSentimentChart(stats) {
+                const ctx = document.getElementById('sentimentDistChart');
+                
+                if (sentimentChart) {
+                    sentimentChart.destroy();
+                }
+
+                sentimentChart = new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Positive', 'Negative', 'Neutral'],
+                        datasets: [{
+                            data: [
+                                stats.positive_count,
+                                stats.negative_count,
+                                stats.neutral_count
+                            ],
+                            backgroundColor: [
+                                '#10b981',
+                                '#ef4444',
+                                '#6b7280'
+                            ],
+                            borderColor: '#2B2D30',
+                            borderWidth: 3,
+                            hoverOffset: 15
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    color: '#E8E8E8',
+                                    padding: 15,
+                                    font: {
+                                        family: 'Google Sans',
+                                        size: 13,
+                                        weight: 500
+                                    }
+                                }
+                            },
+                            tooltip: {
+                                backgroundColor: '#1E1F22',
+                                titleColor: '#E8E8E8',
+                                bodyColor: '#E8E8E8',
+                                borderColor: '#43454A',
+                                borderWidth: 1,
+                                padding: 12,
+                                displayColors: true,
+                                callbacks: {
+                                    label: function(context) {
+                                        const label = context.label || '';
+                                        const value = context.parsed || 0;
+                                        const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                        const percentage = ((value / total) * 100).toFixed(1);
+                                        return `${label}: ${value} (${percentage}%)`;
+                                    }
+                                }
+                            }
+                        },
+                        animation: {
+                            animateRotate: true,
+                            animateScale: true,
+                            duration: 1000
+                        }
+                    }
+                });
+            }
+
+            function renderTimelineChart(tweets) {
+                const ctx = document.getElementById('timelineChart');
+                
+                if (timelineChart) {
+                    timelineChart.destroy();
+                }
+
+                // Group tweets by sentiment
+                const sentimentCounts = {
+                    positive: 0,
+                    negative: 0,
+                    neutral: 0
+                };
+
+                tweets.forEach(tweet => {
+                    if (sentimentCounts.hasOwnProperty(tweet.sentiment)) {
+                        sentimentCounts[tweet.sentiment]++;
+                    }
+                });
+
+                timelineChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Positive', 'Negative', 'Neutral'],
+                        datasets: [{
+                            label: 'Tweet Count',
+                            data: [
+                                sentimentCounts.positive,
+                                sentimentCounts.negative,
+                                sentimentCounts.neutral
+                            ],
+                            backgroundColor: [
+                                'rgba(16, 185, 129, 0.8)',
+                                'rgba(239, 68, 68, 0.8)',
+                                'rgba(107, 114, 128, 0.8)'
+                            ],
+                            borderColor: [
+                                '#10b981',
+                                '#ef4444',
+                                '#6b7280'
+                            ],
+                            borderWidth: 2,
+                            borderRadius: 8,
+                            hoverBackgroundColor: [
+                                '#10b981',
+                                '#ef4444',
+                                '#6b7280'
+                            ]
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    color: '#A0A0A0',
+                                    font: {
+                                        family: 'Google Sans',
+                                        size: 12
+                                    },
+                                    stepSize: 1
+                                },
+                                grid: {
+                                    color: '#43454A',
+                                    drawBorder: false
+                                },
+                                border: {
+                                    display: false
+                                }
+                            },
+                            x: {
+                                ticks: {
+                                    color: '#A0A0A0',
+                                    font: {
+                                        family: 'Google Sans',
+                                        size: 12
+                                    }
+                                },
+                                grid: {
+                                    display: false
+                                },
+                                border: {
+                                    display: false
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            tooltip: {
+                                backgroundColor: '#1E1F22',
+                                titleColor: '#E8E8E8',
+                                bodyColor: '#E8E8E8',
+                                borderColor: '#43454A',
+                                borderWidth: 1,
+                                padding: 12,
+                                displayColors: false
+                            }
+                        },
+                        animation: {
+                            duration: 1000,
+                            easing: 'easeInOutQuart'
+                        }
+                    }
                 });
             }
 

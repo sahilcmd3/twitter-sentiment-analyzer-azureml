@@ -22,7 +22,7 @@ class SentimentVisualizer:
         """Create pie chart of sentiment distribution"""
         sentiment_counts = df["sentiment"].value_counts()
 
-        plt.figure(figsize=(10, 6))
+        plt.figure(figsize=(6, 5))
         colors = [self.colors.get(s, "#95a5a6") for s in sentiment_counts.index]
 
         plt.pie(
@@ -49,7 +49,7 @@ class SentimentVisualizer:
         df["date"] = pd.to_datetime(df["created_at"]).dt.date
         timeline_data = df.groupby(["date", "sentiment"]).size().unstack(fill_value=0)
 
-        plt.figure(figsize=(14, 6))
+        plt.figure(figsize=(6, 5))
 
         for sentiment in timeline_data.columns:
             color = self.colors.get(sentiment, "#95a5a6")
